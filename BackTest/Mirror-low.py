@@ -40,7 +40,11 @@ for i in range(len(reference_data)):
     reference_day.append(round(reference_data[i]['close']/reference_data[i]['open'],2))
 
 print(reference_day)
-
+reference_day1 = reference_day[0]
+reference_day2 = reference_day[1]
+reference_day3 = reference_day[2]
+reference_day4 = reference_day[3]
+reference_day5 = reference_day[4]
 datalistindex = schedule.schedule.index(start)
 
 for i in range(datalistindex,datalistindex+span):
@@ -56,8 +60,10 @@ for ticki in tick.tick:
     if data != []:
         try:
             for i in range(len(data)):
-                for ii in range(len(reference_data)):
-                    if
+                if (reference_day1*0.99) < (data[i]['close']/data[i]['open']) < (reference_day1*1.01):
+                    if (reference_day2*0.99) < (data[i]['close']/data[i]['open']) < (reference_day2*1.01):
+                        # if (reference_day3*0.99) < (data[i]['close']/data[i]['open']) < (reference_day3*1.01):
+                            print(data[i]['tick'],data[i]['dt'])
         except:pass
     del data[:]
     print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
