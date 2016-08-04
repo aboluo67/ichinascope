@@ -61,8 +61,8 @@ for ticki in tick.tick:
         try:
             for i in range(len(data)):
                 if (reference_day1*0.99) < (data[i]['close']/data[i]['open']) < (reference_day1*1.01):
-                    if (reference_day2*0.99) < (data[i]['close']/data[i]['open']) < (reference_day2*1.01):
-                        # if (reference_day3*0.99) < (data[i]['close']/data[i]['open']) < (reference_day3*1.01):
+                    if (reference_day2*0.99) < (data[i+1]['close']/data[i+1]['open']) < (reference_day2*1.01):
+                        if (reference_day3*0.99) < (data[i+2]['close']/data[i+2]['open']) < (reference_day3*1.01):
                             print(data[i]['tick'],data[i]['dt'])
         except:pass
     del data[:]
