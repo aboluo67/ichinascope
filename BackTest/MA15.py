@@ -40,6 +40,10 @@ for ticki in tick.tick:
                 print ''
                 print 'No.', count
                 print data[0]['tick'], data[0]['dt']
+                print 'MA15:',((data[0]['ma']['MA10'] + data[0]['ma']['MA10']) / 2),\
+                    ' Close:',(data[0]['close']),' 系数比:',\
+                    round(((data[0]['close']-((data[0]['ma']['MA10'] + data[0]['ma']['MA10']) / 2))/((data[0]['ma']['MA10'] + data[0]['ma']['MA10']) / 2))*100,2)
+                #系数比 (close-ma15)/ma15
                 counti.append(count)
         except:pass
     del data[:]
