@@ -40,39 +40,51 @@ for ticki in tick.tick:
     if data != []:
         # 跌幅大于４％　0.04
         try:
-            if (1-round(data[0]['open']/data[0]['close'],2)) < -0.04 :
-                if data[1]['open']>data[1]['close']:
-                    if ((data[1]['open']/data[1]['close'] - 1) * 100) < 0.5:
-                        count += 1
-                        print('')
-                        print ('No.'),count
-                        # 十字星系数好像有点不对　问题不严重
-                        print ('十字星系数'),round(((data[1]['open']/data[1]['close'] - 1) * 100),2)
-                        print ('%17s' % 'open '),('%7s' % 'close')
-
-                        print(data[0]['tick']),('  前一日跌幅为4%以上 今日为早晨十字星 绿')
-
-                        for i in range(0,len(data)):
-                            #data put into [] then
-                            print 'Day:','%2s' % (i+1),(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\
-                                ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
-                            print max(data[i]['close'])
-
-                        print ('----------------')
-                if data[1]['open'] < data[1]['close']:
-                    if ((data[1]['close'] / data[1]['open'] - 1) * 100) < 0.5:
-                        count += 1
-                        print('')
-                        print ('No.'),count
-                        print ('十字星系数'), round(((data[1]['open'] / data[1]['close'] - 1) * 100), 2)
-                        print ('%18s' % 'open'),('%8s' % 'close')
-
-                        print(data[0]['tick']), ('  前一日跌幅为4%以上 今日为早晨十字星 红')
-                        print ('%19s' % 'close'),('%5s' % 'vol'),('%9s' % 'amount')
-                        for i in range(0,len(data)):
-                            print 'Day:','%2s' % (i+1),(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\
-                                ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
-                        print ('----------------')
+            for i in range(len(data)):
+                if (1-round(data[i]['open']/data[i]['close'],2)) < -0.04 :
+                    if data[i+1]['open'] > data[i+1]['close']:
+                        if ((data[i+1]['open']/data[i+1]['close'] - 1) * 100) < 0.5:
+                            count += 1
+                            print ''
+                            print 'No: ', count
+                            print '十字星系数', round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2)
+                            print data[i]['tick'], '  前一日跌幅为4%以上 今日为早晨十字星 绿'
+                            print '%28s' % 'close ', '%4s' % 'rate', '%5s' % 'vol'
+                            maxclose = []
+                            for i in range(len(data)):
+                                maxclose.append(data[i]['close'])
+                            for i in range(len(data)):
+                                if i == maxclose.index(max(maxclose)):
+                                    print 'Day:','%2s' % (i+1),(data[i]['dt']),'<-', \
+                                        ('%5.2f' % data[i]['close']),\
+                                        ('%5.2f' % round(data[i]['close']/data[0]['close'],2)),\
+                                        ('%7d' % (data[i]['vol']/1000))\
+                                        ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
+                                else:
+                                    print 'Day:','%2s' % (i+1),(data[i]['dt']), ('%8.2f' % data[i]['close']),('%5.2f' % round(data[i]['close']/data[0]['close'],2)), ('%6d' % (data[i]['vol']/1000))\
+                                        ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
+                    if data[i+1]['open'] < data[i+1]['close']:
+                        if ((data[i+1]['open']/data[i+1]['close'] - 1) * 100) < 0.5:
+                            count += 1
+                            print ''
+                            print 'No: ', count
+                            print '十字星系数', round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2)
+                            print '%17s' % 'open ', '%7s' % 'close'
+                            print data[i]['tick'], '  前一日跌幅为4%以上 今日为早晨十字星 红'
+                            print '%28s' % 'close ', '%4s' % 'rate', '%5s' % 'vol'
+                            maxclose = []
+                            for i in range(len(data)):
+                                maxclose.append(data[i]['close'])
+                            for i in range(len(data)):
+                                if i == maxclose.index(max(maxclose)):
+                                    print 'Day:','%2s' % (i+1),(data[i]['dt']),'<-', \
+                                        ('%5.2f' % data[i]['close']),\
+                                        ('%5.2f' % round(data[i]['close']/data[0]['close'],2)),\
+                                        ('%7d' % (data[i]['vol']/1000))\
+                                        ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
+                                else:
+                                    print 'Day:','%2s' % (i+1),(data[i]['dt']), ('%8.2f' % data[i]['close']),('%5.2f' % round(data[i]['close']/data[0]['close'],2)), ('%6d' % (data[i]['vol']/1000))\
+                                        ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
         except:pass
     del data[:]
     print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
