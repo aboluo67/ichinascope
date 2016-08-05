@@ -14,7 +14,7 @@ datalist = []
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
 
-db = conn.db.data201516
+db = conn.db.data2016
 start = '2016-01-04'
 span = 30
 
@@ -49,12 +49,15 @@ for ticki in tick.tick:
                         # 十字星系数好像有点不对　问题不严重
                         print ('十字星系数'),round(((data[1]['open']/data[1]['close'] - 1) * 100),2)
                         print ('%17s' % 'open '),('%7s' % 'close')
-                        print data[0]['dt'],'%8.2f' % data[0]['open'],'%8.2f' % data[0]['close']
-                        print data[1]['dt'],'%8.2f' % data[1]['open'],'%8.2f' % data[1]['close']
+
                         print(data[0]['tick']),('  前一日跌幅为4%以上 今日为早晨十字星 绿')
+
                         for i in range(0,len(data)):
-                            print(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\
+                            #data put into [] then
+                            print 'Day:','%2s' % (i+1),(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\
                                 ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
+                            print max(data[i]['close'])
+
                         print ('----------------')
                 if data[1]['open'] < data[1]['close']:
                     if ((data[1]['close'] / data[1]['open'] - 1) * 100) < 0.5:
@@ -63,12 +66,11 @@ for ticki in tick.tick:
                         print ('No.'),count
                         print ('十字星系数'), round(((data[1]['open'] / data[1]['close'] - 1) * 100), 2)
                         print ('%18s' % 'open'),('%8s' % 'close')
-                        print data[0]['dt'],'%8.2f' % data[0]['open'],'%8.2f' % data[0]['close']
-                        print data[1]['dt'],'%8.2f' % data[1]['open'],'%8.2f' % data[1]['close']
+
                         print(data[0]['tick']), ('  前一日跌幅为4%以上 今日为早晨十字星 红')
                         print ('%19s' % 'close'),('%5s' % 'vol'),('%9s' % 'amount')
                         for i in range(0,len(data)):
-                            print(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\
+                            print 'Day:','%2s' % (i+1),(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\
                                 ,('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
                         print ('----------------')
         except:pass

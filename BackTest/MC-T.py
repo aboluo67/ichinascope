@@ -14,9 +14,9 @@ datalist = []
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
 
-db = conn.db.data201516
-start = '2016-01-04'
-span = 11
+db = conn.db.data2016
+start = '2016-07-11'
+span = 6
 
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
@@ -41,12 +41,13 @@ for ticki in tick.tick:
         try:
             if (1-round(data[i]['open']/data[i]['close'],2)) < -0.04 :
                 if data[i+1]['open']>data[i+1]['close']:
-                    if ((data[i+1]['open']/data[i+1]['close'] - 1) * 100) < 0.5:
+                    # if ((data[i+1]['open']/data[i+1]['close'] - 1) * 100) < 0.5:
                         count += 1
                         print('')
                         print ('No.'),count
                         # 十字星系数好像有点不对　问题不严重
                         print ('十字星系数'),round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2)
+                        # print ('十字星系数'),round(((data[i]['open']/data[i]['close'] - 1) * 100),2)
                         print ('%17s' % 'open '),('%7s' % 'close'),('%9s' % '| close')
                         print data[i]['dt'],\
                             '%8.2f' % data[i]['open'],\
@@ -58,10 +59,10 @@ for ticki in tick.tick:
                         print data[i+3]['dt'],'%8.2f' % data[i+3]['close']
                         print data[i+4]['dt'],'%8.2f' % data[i+4]['close']
                         print data[i+5]['dt'],'%8.2f' % data[i+5]['close']
-                        print data[i+6]['dt'],'%8.2f' % data[i+6]['close']
-                        print data[i+7]['dt'],'%8.2f' % data[i+7]['close']
-                        print data[i+8]['dt'],'%8.2f' % data[i+8]['close']
-                        print data[i+9]['dt'],'%8.2f' % data[i+9]['close']
+                        # print data[i+6]['dt'],'%8.2f' % data[i+6]['close']
+                        # print data[i+7]['dt'],'%8.2f' % data[i+7]['close']
+                        # print data[i+8]['dt'],'%8.2f' % data[i+8]['close']
+                        # print data[i+9]['dt'],'%8.2f' % data[i+9]['close']
                         print(data[i]['tick']),('  前一日跌幅为4%以上 今日为早晨十字星 绿')
                         for i in range(0,len(data)):
                             print(data[i]['dt']),('%8.2f' % data[i]['close']),('%6d' % (data[i]['vol']/1000))\

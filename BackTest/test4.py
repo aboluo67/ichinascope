@@ -1,4 +1,5 @@
-a = [5,5,6,7]
-for i in range(0,len(a)):
-    if a[i]>5:
-        print a[i]
+a = [1,2,3]
+print max(a)
+
+b = [{'i':3},{'e':2},{'g':13}]
+print max(b['g'])
