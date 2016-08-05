@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 #encoding:utf-8
-import tushare as ts
-import json
-from pymongo import MongoClient
-import time
+import datetime
 import md5
 import re
-import numpy
 import threading
-import datetime
 import time
+
+import numpy
+import tushare as ts
+from pymongo import MongoClient
+
 
 def IsNumber(x):
 	 if re.match(r'^\d+\.?\d+$', x) == None:
@@ -24,13 +24,13 @@ def IsFloat(x):
 	 return True
 
 def IsInt(x):
-	 if type(x) is int:
-	 	return True
-	 if x=='0':
-	 	return True
-	 if re.match(r'^[1-9]\d*$', x) == None:
-	 	return False
-	 return True
+	if type(x) is int:
+		return True
+	if x=='0':
+		return True
+	if re.match(r'^[1-9]\d*$', x) == None:
+		return False
+		return True
 
 def DataFrameToMongo(df, collection, id_field=[], id_prefix=''):
 	'''
