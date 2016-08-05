@@ -44,7 +44,7 @@ def stock_search():
     for i in tick.tick:
         print i
         try:
-            url = "http://api.ichinascope.com/api/hq/stock/price/daily?codes=" + i +"&adjusted=f&from=2016-08-02&to=2016-08-03"
+            url = "http://api.ichinascope.com/api/hq/stock/price/daily?codes=" + i +"&adjusted=f&from=2016-01-01&to=2016-08-06"
             # url = "http://api.ichinascope.com/api/hq/stock/price/daily?codes=000001&adjusted=f&from=2016-07-22&to=2016-07-26"
             req = http.Request(url, headers=header)
 

@@ -43,8 +43,8 @@
 
 
 BackTest
-    |-----
-    |-----
+    |-----GoldenCross 金叉 ：3日内MACD DIFF DEA 均小于0 MACD下于0.1
+    |-----MA15
     |-----
     |-----
     |-----
