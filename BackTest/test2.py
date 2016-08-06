@@ -1,4 +1,8 @@
-a = [1,2,3,4]
+a = [5,2,3,4,7,2,9]
 
-for i in range(len(a)):
-    print('-')*i
+print max(a[0:3])
+print min(a[0:3])
+
+b= [1,2,3,4,5,6,7,8,9,10,11,12]
+print(b[0:6])
+print(b[6:12])

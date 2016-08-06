@@ -55,7 +55,7 @@ ticklen = len(tick.tick)
 for ticki in tick.tick:
     try:
         for i in range(len(datalist)):
-            for item in db.find({'dt':schedule.schedule[i],'tick':ticki}):
+            for item in db.find({'dt':datalist[i], 'tick':ticki}):
                 data.append(item)
         for i in range(reference_span):
             if (reference_day[i]*0.98)<data[i]['close']/data[i]['open']<(reference_day[i]*1.02):

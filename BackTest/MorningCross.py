@@ -33,7 +33,7 @@ count = 0
 ticklen = len(tick.tick)
 for ticki in tick.tick:
     for i in range(0,span):
-        for item in db.find({'dt':datalist[i],'tick':ticki}):
+        for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)):
         if i<len(data)-1 and ((1-round(data[i]['open']/data[i]['close'],2)) < -0.04):
