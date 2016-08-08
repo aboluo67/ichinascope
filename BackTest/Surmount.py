@@ -67,6 +67,7 @@ for ticki in tick.tick:
             data12.append(data[i]['close'])
         if (max(data12[:6])/min(data12[6:12]))>1.1 and data[11]['close']>data[10]['close'] and \
                         data[11]['close'] > max(data12)*0.7:
+            print ''
             print 'data12'
             print data[0]['dt'], data[0]['tick'], '--', data[11]['dt']
         data15 = []
@@ -75,6 +76,7 @@ for ticki in tick.tick:
             data15.append(data[i]['close'])
         if (max(data12[:8])/min(data12[8:15]))>1.1 and data[15]['close']>data[14]['close'] and \
                         data[15]['close'] > max(data15)*0.7:
+            print ''
             print 'data15'
             print data[0]['tick'], data[0]['dt'], '--', data[14]['dt']
         data20 = []
@@ -83,6 +85,7 @@ for ticki in tick.tick:
             data20.append(data[i]['close'])
         if (max(data20[:10])/min(data20[10:20]))>1.1 and data[20]['close']>data[19]['close'] and \
                         data[20]['close'] > max(data20)*0.7:
+            print ''
             print 'data20'
             print data[0]['tick'], data[0]['dt'], '--', data[19]['dt']
         data25 = []
@@ -91,6 +94,7 @@ for ticki in tick.tick:
             data25.append(data[i]['close'])
         if (max(data25[:13])/min(data25[13:25]))>1.1 and data[25]['close']>data[24]['close'] and \
                         data[25]['close'] > max(data25)*0.7:
+            print ''
             print 'data25'
             print data[0]['tick'], data[0]['dt'],  '--', data[24]['dt']
     except:pass
