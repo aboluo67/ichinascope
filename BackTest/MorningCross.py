@@ -10,7 +10,7 @@ sys.setdefaultencoding('utf8')
 import os
 import time
 import sys
-import tick2
+import tick
 import schedule
 from pymongo import MongoClient
 conn = MongoClient('localhost',27017)
@@ -47,11 +47,11 @@ for i in range(datalistindex,datalistindex+span):
 
 print(datalist)
 count = 0
-ticklen = len(tick2.tick)
+ticklen = len(tick.tick)
 #最好的出售时间TOP3,最高利润TOP3
 bestday = []
 bestprice = []
-for ticki in tick2.tick:
+for ticki in tick.tick:
     for i in range(0,span):
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
@@ -127,7 +127,7 @@ for ticki in tick2.tick:
                     print ('----------------')
                     f.write('----------------\n')
     del data[:]
-    print '\r','进度 :',tick2.tick.index(ticki),'/',ticklen,
+    print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
     sys.stdout.flush()
 print '\n'
 print '平均最好收益：',round((sum(bestprice)*1.0)/len(bestprice),2)
