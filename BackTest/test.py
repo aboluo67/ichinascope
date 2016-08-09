@@ -22,5 +22,5 @@
 # f.write('bbb\n')
 
 
-if 10>8>9:
+if 10>8<7:
     print 'yes'
