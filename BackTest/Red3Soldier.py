@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-# 旭日东升
+# tandi+hongsanbin
 
 import sys
 reload(sys)
@@ -17,7 +17,7 @@ conn = MongoClient('localhost',27017)
 
 db = conn.db.data2016
 start = '2016-06-01'
-span = 5
+span = 15
 data = []
 datalist = []
 
@@ -42,13 +42,14 @@ for ticki in tick.tick:
     for i in range(0,span):
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
-    for i in range(len(data)-1):
-        # 系数还要再调整
-        if (1-round(data[i]['open']/data[i]['close'],2))<-0.03 and\
-                (data[i+1]['open']> data[i+1]['close']) and (data[i]['close']>data[i]['open']):
-                    print ''
-                    print data[i+1]['tick'],data[i+1]['dt']
-                    print ('----------------')
+    for i in range(len(data)-3):
+        if data[i]['open']>data[i]['close']>data[i]['low'] and \
+            data[i]['close']<data[i+1]['open']<data[i+1]['close'] and \
+                data[i+1]['open']<data[i+2]['open']<data[i+2]['close'] and \
+                    data[i+2]['open']<data[i+3]['open']<data[i+3]['close']:
+                        print ''
+                        print data[i]['tick'],data[i]['dt']
+                        print ('----------------')
     del data[:]
     print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
     sys.stdout.flush()

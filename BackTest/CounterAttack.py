@@ -42,14 +42,13 @@ for ticki in tick.tick:
     for i in range(0,span):
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
-    for i in range(len(data)):
-        if i<len(data)-1:
-            if (1-round(data[i]['open']/data[i]['close'],2)) < -0.03 and\
-                (1-round(data[i+1]['open']/data[i+1]['close'],2))> 0.02 and \
-                    (data[i]['close']*0.98<data[i+1]['close']<data[i]['close']*1.01):
-                        print ''
-                        print data[i+1]['tick'],data[i+1]['dt']
-                        print ('----------------')
+    for i in range(len(data)-1):
+        if (1-round(data[i]['open']/data[i]['close'],2)) < -0.03 and\
+            (1-round(data[i+1]['open']/data[i+1]['close'],2))> 0.02 and \
+                (data[i]['close']*0.98<data[i+1]['close']<data[i]['close']*1.01):
+                    print ''
+                    print data[i+1]['tick'],data[i+1]['dt']
+                    print ('----------------')
     del data[:]
     print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
     sys.stdout.flush()

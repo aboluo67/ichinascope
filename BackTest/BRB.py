@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-# 旭日东升
+# 两红夹一黑
 
 import sys
 reload(sys)
@@ -43,9 +43,9 @@ for ticki in tick.tick:
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)-1):
-        # 系数还要再调整
-        if (1-round(data[i]['open']/data[i]['close'],2))<-0.03 and\
-                (data[i+1]['open']> data[i+1]['close']) and (data[i]['close']>data[i]['open']):
+        if (1-round(data[i]['open']/data[i]['close'],2)) < -0.03 and\
+            (1-round(data[i+1]['open']/data[i+1]['close'],2))> 0.02 and \
+                (data[i]['close']*0.98<data[i+1]['close']<data[i]['close']*1.01):
                     print ''
                     print data[i+1]['tick'],data[i+1]['dt']
                     print ('----------------')
