@@ -43,7 +43,7 @@ for ticki in tick.tick:
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)-1):
-        if (1-round(data[i]['close']/data[i]['open'],2)) > .0.3 and\
+        if (1-round(data[i]['close']/data[i]['open'],2)) >0.03 and\
             data[i+1]['close']>data[i]['close'] and data[i+1]['open']>data[i]['close'] and\
                 data[i+2]['close']>data[i+1]['close'] and data[i+2]['open']>data[i+1]['close']:
                     print ''

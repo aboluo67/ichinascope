@@ -1,130 +1,108 @@
 # -*- coding:utf-8 -*-
-# 早晨十字星
-#十字星有红绿 最好第一天跌幅能在input时手动输入%之多少 提示一般为X
-#十字星上下影线长度灵活设定  是否上影线越长越好
-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-import os
-import time
+# 模仿回测 按照某只股票近几日的走势 查找近一段时间所有的股票是否有类似
 import sys
 import tick
 import schedule
 from pymongo import MongoClient
+print('——*——*——*————*——*——*————*——*——*————*——*——*———*——*——*——')
+print('当 K 线 下 行 至 MA15 以 下 时,切 勿 冲 动 买 入 !!!')
+print('——*——*——*————*——*——*————*——*——*————*——*——*———*——*——*——')
 conn = MongoClient('localhost',27017)
-report_time = time.strftime("%Y-%m-%d", time.localtime())
-report_address = '/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘/早晨十字星.txt'
-if os.path.exists('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘'):
-    message = 'file exists.'
-    print message
-else:
-    os.makedirs('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘')
-    print 'Created Report '+report_time+'-每日复盘'
-
+# 回测数据
+data = []
+datalist = []
+# 参照数据
+reference_data = []
+reference_datalist = []
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
 
 db = conn.db.data2016
-start = '2016-06-01'
+reference_tick = '300282'
+reference_start = '2016-04-15'
+reference_span = 3
+
+start = '2016-03-01'
 span = 50
-data = []
-datalist = []
 
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
-print('——*——*——*————*——*——*————*——*——*————*——*——*———*——*——*——')
-print('当 K 线 下 行 至 MA15 以 下 时,切 勿 冲 动 买 入 !!!')
-print('——*——*——*————*——*——*————*——*——*————*——*——*———*——*——*——')
-print time.strftime("%Y-%m-%d", time.localtime())
 
-
+reference_index = schedule.schedule.index(reference_start)
+for i in range(reference_index,reference_index + reference_span):
+    reference_datalist.append(schedule.schedule[i])
+    for item in db.find({'dt':schedule.schedule[i],'tick':reference_tick}):
+        reference_data.append(item)
+print reference_data[0]['close'],reference_data[0]['open']
+print reference_data[1]['close'],reference_data[1]['open']
+print reference_data[2]['close'],reference_data[2]['open']
+reference_price = []
+for i in range(len(reference_data)):
+    reference_price.append(round((1-reference_data[i]['close']/reference_data[i]['open'])*100,2))
+print reference_price
+reference_price1 = map(lambda x: x-0.10, reference_price)
+reference_price2 = map(lambda x: x+0.10, reference_price)
+print 'reference_price1:',reference_price1
+print 'reference_price2:',reference_price2
 datalistindex = schedule.schedule.index(start)
 
 for i in range(datalistindex,datalistindex+span):
     datalist.append(schedule.schedule[i])
 
-print(datalist)
+print('datalist:',len(datalist))
 count = 0
+data3 = []
 ticklen = len(tick.tick)
-#最好的出售时间TOP3,最高利润TOP3
-bestday = []
-bestprice = []
 for ticki in tick.tick:
-    for i in range(0,span):
-        for item in db.find({'dt':datalist[i], 'tick':ticki}):
-            data.append(item)
-    for i in range(len(data)):
-        if i<len(data)-1 and ((1-round(data[i]['open']/data[i]['close'],2)) < -0.04):
-            if ((data[i+1]['open']/data[i+1]['close'] - 1) * 100) < 0.5:
-                if data[i+1]['open']>data[i+1]['close']:
-                    count += 1
-                    f = open(report_address, 'a+')
-                    print('')
-                    f.write('\n')
-                    print ('No.'),count
-                    f.write('No. '+str(count)+'\n')
-                    print ('十字星系数:'),round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2)
-                    f.write('十字星系数:'+str(round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2))+'\n')
-                    print data[i]['tick']," 首日跌幅为4%以上 ", data[i]['dt'] ,"为早晨十字星 绿"
-                    f.write(data[i]['tick'] + "首日跌幅为4%以上 "+ data[i]['dt'] + "为早晨十字星 绿"+'\n')
-                    print ('%19s' % 'open '),('%8s' % 'close'),('%8s' % 'amplitude'),('%6s' % 'vol')
-                    f.write(('%19s' % 'open ')+('%8s' % 'close')+('%8s' % 'amplitude')+('%6s' % 'vol')+'\n')
-                    amplitudelist = []
-                    for ii in range(i,len(data)):
-                        amplitude = data[ii]['close']/data[i]['close']
-                        amplitudelist.append(amplitude)
-                    for ii in range(i,len(data)):
-                        amplitude = data[ii]['close']/data[i]['close']
-                        if amplitude == max(amplitudelist):
-                            print(data[ii]['dt']),('%8.2f' % data[ii]['open']),('%8.2f' % data[ii]['close']),\
-                                '->',('%5.2f' % amplitude),('%8d' % (data[ii]['vol']/1000))
-                            f.write((data[ii]['dt'])+('%8.2f' % data[ii]['open'])+('%8.2f' % data[ii]['close'])+\
-                                ' ->'+('%5.2f' % amplitude)+('%8d' % (data[ii]['vol']/1000))+'\n')
-                            # print('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
-                        if amplitude != max(amplitudelist):
-                            print(data[ii]['dt']),('%8.2f' % data[ii]['open']),('%8.2f' % data[ii]['close']),\
-                                ('%8.2f' % amplitude),('%8d' % (data[ii]['vol']/1000))
-                            f.write((data[ii]['dt'])+('%8.2f' % data[ii]['open'])+('%8.2f' % data[ii]['close'])+\
-                                ('%8.2f' % amplitude)+('%8d' % (data[ii]['vol']/1000))+'\n')
-                            # print('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
-                    print ('----------------')
-                    f.write('----------------\n')
-                if data[i+1]['open']<data[i+1]['close']:
-                    count += 1
-                    f = open(report_address, 'a+')
-                    print('')
-                    f.write('\n')
-                    print ('No.'),count
-                    f.write('No. '+str(count)+'\n')
-                    print ('十字星系数:'),round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2)
-                    f.write('十字星系数:'+str(round(((data[i+1]['open']/data[i+1]['close'] - 1) * 100),2))+'\n')
-                    print data[i]['tick']," 首日跌幅为4%以上 ", data[i]['dt'] ,"为早晨十字星 红"
-                    f.write(data[i]['tick'] + "首日跌幅为4%以上 "+ data[i]['dt'] + "为早晨十字星 红"+'\n')
-                    print ('%19s' % 'open '),('%8s' % 'close'),('%8s' % 'amplitude'),('%6s' % 'vol')
-                    f.write(('%19s' % 'open ')+('%8s' % 'close')+('%8s' % 'amplitude')+('%6s' % 'vol')+'\n')
-                    amplitudelist = []
-                    for ii in range(i,len(data)):
-                        amplitude = data[ii]['close']/data[i]['close']
-                        amplitudelist.append(amplitude)
-                    for ii in range(i,len(data)):
-                        amplitude = data[ii]['close']/data[i]['close']
-                        if amplitude == max(amplitudelist):
-                            print(data[ii]['dt']),('%8.2f' % data[ii]['open']),('%8.2f' % data[ii]['close']),\
-                                '->',('%5.2f' % amplitude),('%8d' % (data[ii]['vol']/1000))
-                            f.write((data[ii]['dt'])+('%8.2f' % data[ii]['open'])+('%8.2f' % data[ii]['close'])+\
-                                ' ->'+('%5.2f' % amplitude)+('%8d' % (data[ii]['vol']/1000))+'\n')
-                            # print('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
-                        if amplitude != max(amplitudelist):
-                            print(data[ii]['dt']),('%8.2f' % data[ii]['open']),('%8.2f' % data[ii]['close']),\
-                                ('%8.2f' % amplitude),('%8d' % (data[ii]['vol']/1000))
-                            f.write((data[ii]['dt'])+('%8.2f' % data[ii]['open'])+('%8.2f' % data[ii]['close'])+\
-                                ('%8.2f' % amplitude)+('%8d' % (data[ii]['vol']/1000))+'\n')
-                            # print('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
-                    print ('----------------')
-                    f.write('----------------\n')
+    try:
+        for i in range(len(datalist)):
+            for item in db.find({'dt':datalist[i], 'tick':ticki}):
+                data.append(item)
+        data2 = []
+        for i in range(len(data)):
+            data2.append(round((1 - data[i]['close'] / data[i]['open']) * 100, 2))
+        for i in range(len(data) - reference_span + 1):
+            # if reference_price1[0] < data2[i:i+reference_span] <reference_price2[0] and \
+            #     reference_price1[1] < data2[i+1:i + reference_span+1] < reference_price2[1] and \
+            #         reference_price1[2] < data2[i+2:i + reference_span+2] < reference_price2[2]:
+            #             print data[i]['tick'],data[i]['dt']
+            if reference_price1[0] < data2[i] < reference_price2[0] and \
+                    reference_price1[1] < data2[i + 1] < reference_price2[1] and \
+                        reference_price1[2] < data2[i + 2] < reference_price2[2]:
+                            print data[i]['tick'], data[i]['dt']
+
+    except:pass
     del data[:]
     print '\r','进度 :',tick.tick.index(ticki),'/',ticklen,
     sys.stdout.flush()
-f.close()
 
+    # a = [1, 2, 3, 4, 5, 6]
+    # b = [2, 3, 4]
+    # b1 = [1.9, 2.9, 3.9]
+    # b2 = [2.1, 3.1, 4.1]
+    # for i in range(len(a) - len(b) + 1):
+    #     if b1 < a[i:i + len(b)] < b2:
+    #         print 'O',
+    #     else:
+    #         print 'X',
+#
+# ['2016-04-15', '2016-04-18', '2016-04-19']
+# reference_day [0.98, 0.99, 1.0]
+# ('datalist:', 100)
+# 进度 : 72 / 2886 2016-04-21 2016-04-22 2016-04-25
+# 300392 300392 300392
+# 0.91593046452 0.954470471791 1.005521049
+# 进度 : 96 / 2886 2016-03-21 2016-03-22 2016-03-23
+# 300087 300087 300087
+# 0.997557003257 0.999163179916 0.972928630025
+# 进度 : 151 / 2886
+
+
+# 33.4 34.25
+# 32.69 32.89
+# 32.84 32.7
+# [2.48, 0.61, -0.43]
+# reference_price1: [2.38, 0.51, -0.53]
+# reference_price2: [2.58, 0.71, -0.32999999999999996]
+# ('datalist:', 50)
+# 进度 : 25 / 2886 300282 2016-04-15

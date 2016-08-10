@@ -4,6 +4,8 @@
 #十字星有红绿 最好第一天跌幅能在input时手动输入%之多少 提示一般为X
 #十字星上下影线长度灵活设定  是否上影线越长越好
 
+# daily 35+
+
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -27,8 +29,8 @@ else:
 #---------------------此处修改参数---------------------------
 
 db = conn.db.data2016
-start = '2016-06-01'
-span = 60
+start = '2016-07-28'
+span = 2
 data = []
 datalist = []
 

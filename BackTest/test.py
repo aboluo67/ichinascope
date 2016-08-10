@@ -1,26 +1,34 @@
-# -*- coding:utf-8 -*-
-# import os
-# import time
-# import sys
-# import tick
-# import schedule
-# from pymongo import MongoClient
-# conn = MongoClient('localhost',27017)
-# report_time = time.strftime("%Y-%m-%d", time.localtime())
-# if os.path.exists('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘'):
-#     message = 'file exists.'
-#     print message
-# else:
-#     os.makedirs('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘')
-#     print 'Created Report '+report_time+'-每日复盘'
+a = [1,2,3,4,5,6]
+b = [2,3,4]
+b1 = [1.9,2.9,3.9]
+b2 = [2.1,3.1,4.1]
+for i in range(len(a)-len(b)+1):
+    if b1<a[i:i+len(b)]<b2:
+        print 'O',
+    else:print 'X',
+
+
+# for i in range(len(a)):
+#     for ii in range(len(b)):
+#         print b[ii],a[i]
+#         if b[ii] == a[i]:
+#             print '-------'
+#             print 'YES'
+
+# print a[1:4]
 #
-# report_address = '/home/feheadline/PycharmProjects/ichinascope/Report/' + report_time + '-每日复盘/MorningCross.txt'
-# f = open(report_address, 'a+')
-# print('--')
-# f.write('\n')
-# f.write('aaa\n')
-# f.write('bbb\n')
+# if b == a[1:4]:
+#     print 'YES'
+# print '-----'
+#
+# a = [1,2,3,4,5,6]
+# b = [2.1,3.1,4.9]
+# for i in range(len(a)-len(b)+1):
+#     if a[i:i+len(b)]<b< :
+#         print 'O',
+#     else:print 'X',
 
 
-if 10>8<7:
-    print 'yes'
+c=[]
+c.append(1.1)
+print c

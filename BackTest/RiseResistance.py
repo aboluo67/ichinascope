@@ -16,7 +16,7 @@ conn = MongoClient('localhost',27017)
 #---------------------此处修改参数---------------------------
 
 db = conn.db.data2016
-start = '2016-06-01'
+start = '2016-07-01'
 span = 5
 data = []
 datalist = []
@@ -43,8 +43,8 @@ for ticki in tick.tick:
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)-3):
-        print (1-round(data[i]['close']/data[i]['open'],2))
-        if data[i]['open']<data[i]['close'] and (1-round(data[i]['close']/data[i]['open'],2))>0.025 and\
+        # print (1-round(data[i]['close']/data[i]['open'],2))
+        if (1-round(data[i]['close']/data[i]['open'],2))>0.025 and\
                         data[i+1]['open']>data[i]['close'] and data[i+1]['close']>data[i]['open']:
             print ''
             print data[i]['tick'],data[i]['dt']
