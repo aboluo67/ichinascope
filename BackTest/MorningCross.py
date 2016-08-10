@@ -16,20 +16,31 @@ import tick
 import schedule
 from pymongo import MongoClient
 conn = MongoClient('localhost',27017)
-report_time = time.strftime("%Y-%m-%d", time.localtime())
-report_address = '/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘/早晨十字星.txt'
-if os.path.exists('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘'):
+report_time = time.strftime("%Y-%m-%d %H-%M", time.localtime())
+
+# MAC
+report_address = '/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘/早晨十字星.txt'
+if os.path.exists('/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘'):
     message = 'file exists.'
     print message
 else:
-    os.makedirs('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘')
+    os.makedirs('/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘')
     print 'Created Report '+report_time+'-每日复盘'
+
+# ubuntu
+# report_address = '/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘/早晨十字星.txt'
+# if os.path.exists('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘'):
+#     message = 'file exists.'
+#     print message
+# else:
+#     os.makedirs('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘')
+#     print 'Created Report '+report_time+'-每日复盘'
 
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
 
 db = conn.db.data2016
-start = '2016-07-28'
+start = '2016-06-17'
 span = 2
 data = []
 datalist = []
@@ -59,8 +70,8 @@ for ticki in tick.tick:
             data.append(item)
     for i in range(len(data)):
         if i<len(data)-1 and ((1-round(data[i]['open']/data[i]['close'],2)) < -0.04):
-            if ((data[i+1]['open']/data[i+1]['close'] - 1) * 100) < 0.5:
-                if data[i+1]['open']>data[i+1]['close']:
+            if data[i+1]['open']>data[i+1]['close']:
+                if ((data[i+1]['close']-data[i+1]['open'])/data[i+1]['open'] * 100)>-1.5:
                     count += 1
                     f = open(report_address, 'a+')
                     print('')
@@ -94,7 +105,8 @@ for ticki in tick.tick:
                             # print('%6d' % (data[i]['amount']/1000000)),('%27s' % data[i]['macd'])
                     print ('----------------')
                     f.write('----------------\n')
-                if data[i+1]['open']<data[i+1]['close']:
+            if data[i+1]['open']<data[i+1]['close']:
+                if ((data[i+1]['close']-data[i+1]['open'])/data[i+1]['open'] * 100) < 1.5:
                     count += 1
                     f = open(report_address, 'a+')
                     print('')
