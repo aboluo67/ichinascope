@@ -19,28 +19,28 @@ conn = MongoClient('localhost',27017)
 report_time = time.strftime("%Y-%m-%d %H-%M", time.localtime())
 
 # MAC
-report_address = '/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘/早晨十字星.txt'
-if os.path.exists('/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘'):
-    message = 'file exists.'
-    print message
-else:
-    os.makedirs('/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘')
-    print 'Created Report '+report_time+'-每日复盘'
-
-# ubuntu
-# report_address = '/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘/早晨十字星.txt'
-# if os.path.exists('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘'):
+# report_address = '/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘/早晨十字星.txt'
+# if os.path.exists('/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘'):
 #     message = 'file exists.'
 #     print message
 # else:
-#     os.makedirs('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘')
+#     os.makedirs('/Users/zoutao/ichinascope数据/'+report_time+'-每日复盘')
 #     print 'Created Report '+report_time+'-每日复盘'
+
+# ubuntu
+report_address = '/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘/早晨十字星.txt'
+if os.path.exists('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘'):
+    message = 'file exists.'
+    print message
+else:
+    os.makedirs('/home/feheadline/PycharmProjects/ichinascope/Report/'+report_time+'-每日复盘')
+    print 'Created Report '+report_time+'-每日复盘'
 
 #----------------------------------------------------------
 #---------------------此处修改参数---------------------------
 
 db = conn.db.data2016
-start = '2016-06-17'
+start = '2016-07-11'
 span = 2
 data = []
 datalist = []
@@ -64,14 +64,18 @@ ticklen = len(tick.tick)
 #最好的出售时间TOP3,最高利润TOP3
 bestday = []
 bestprice = []
+f = open(report_address, 'a+')
+f.write('if i<len(data)-1 and ((1-round(data[i][\'open\']/data[i][\'close\'],2)) < -0.03):\n')
+f.write('((data[i+1][\'close\']-data[i+1][\'open\'])/data[i+1][\'open\'] * 100)>-1.5:\n')
+f.write('((data[i+1][\'close\']-data[i+1][\'open\'])/data[i+1][\'open\'] * 100) < 1.5::\n')
 for ticki in tick.tick:
     for i in range(0,span):
         for item in db.find({'dt':datalist[i], 'tick':ticki}):
             data.append(item)
     for i in range(len(data)):
-        if i<len(data)-1 and ((1-round(data[i]['open']/data[i]['close'],2)) < -0.04):
+        if i<len(data)-1 and ((1-round(data[i]['open']/data[i]['close'],2)) < -0.03):
             if data[i+1]['open']>data[i+1]['close']:
-                if ((data[i+1]['close']-data[i+1]['open'])/data[i+1]['open'] * 100)>-1.5:
+                if ((data[i+1]['close']-data[i+1]['open'])/data[i+1]['open'] * 100)>-1.2:
                     count += 1
                     f = open(report_address, 'a+')
                     print('')
@@ -106,7 +110,7 @@ for ticki in tick.tick:
                     print ('----------------')
                     f.write('----------------\n')
             if data[i+1]['open']<data[i+1]['close']:
-                if ((data[i+1]['close']-data[i+1]['open'])/data[i+1]['open'] * 100) < 1.5:
+                if ((data[i+1]['close']-data[i+1]['open'])/data[i+1]['open'] * 100) < 1.2:
                     count += 1
                     f = open(report_address, 'a+')
                     print('')
