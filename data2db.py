@@ -1,16 +1,17 @@
 # coding=utf8
 import sys
+import tick
+from pymongo import MongoClient
 
 if sys.version < "3":
     reload(sys)
     sys.setdefaultencoding("utf-8")
+
 import time
 import base64
 from hashlib import sha1
 from hmac import new as hmac
 import json
-import tick
-from pymongo import MongoClient
 
 if sys.version > "3":
     from urllib import request as http
@@ -42,21 +43,16 @@ def stock_search():
     }
 
     for i in tick.tick:
-        print i
-        try:
-            url = "http://api.ichinascope.com/api/hq/stock/price/daily?codes=" + i +"&adjusted=f&from=2016-01-01&to=2016-08-06"
-            # url = "http://api.ichinascope.com/api/hq/stock/price/daily?codes=000001&adjusted=f&from=2016-07-22&to=2016-07-26"
-            req = http.Request(url, headers=header)
+        url = "http://api.ichinascope.com/api/hq/stock/price/daily?code="+i+"&adjusted=f&from=2016-06-01&to=2016-06-17"
+        req = http.Request(url, headers=header)
 
-            data = http.urlopen(req).read()
-            if isinstance(data, bytes):
-                result = json.loads(data.decode("utf-8"))
-            else:
-                result = json.loads(data)
-
-            conn = MongoClient('localhost', 27017)
-            conn.db.data2016.insert(result['message'])
-        except:pass
+        data = http.urlopen(req).read()
+        if isinstance(data, bytes):
+            result = json.loads(data.decode("utf-8"))
+        else:
+            result = json.loads(data)
+    conn = MongoClient('localhost', 27017)
+    conn.db.data2016.insert(result['message'])
     return result["message"], result["type"]
 
 
